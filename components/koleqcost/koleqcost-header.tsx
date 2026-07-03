@@ -1,6 +1,6 @@
 "use client";
 
-import { Gem, Info, Moon, RefreshCw, Sun } from "lucide-react";
+import { Gem, Moon, RefreshCw, Sun } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -95,14 +95,6 @@ export function KoleqCostHeader({
         <p className="max-w-2xl text-xs leading-relaxed text-muted-foreground sm:text-sm">
           Calculate landed cost, resale price, fees, profit, ROI, and
           break-even value for collectibles.
-        </p>
-        <p className="flex items-start gap-1.5 text-[11px] leading-relaxed text-muted-foreground/90 sm:text-xs">
-          <Info className="mt-0.5 size-3.5 shrink-0 text-muted-foreground/70" />
-          <span>
-            Estimates only — customs, courier fees, exchange rates, marketplace
-            fees, and taxes may vary. Always confirm final costs before you
-            commit.
-          </span>
         </p>
       </div>
     </header>
