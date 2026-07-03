@@ -260,14 +260,15 @@ export function EbayResaleCard({
                 onValueChange={(next) =>
                   handleSellingMethodChange(next as SellingMethod)
                 }
+                className="w-full"
               >
-                <TabsList className="h-11 w-full sm:h-9 sm:w-auto">
+                <TabsList className="mx-auto grid h-11 w-full max-w-md grid-cols-2 gap-0 p-[3px] sm:h-9">
                   {SELLING_METHOD_OPTIONS.map((option) => (
                     <TabsTrigger
                       key={option.value}
                       value={option.value}
                       className={cn(
-                        "min-h-10 flex-1 px-2 text-xs sm:min-h-0 sm:flex-none sm:px-3 sm:text-sm",
+                        "!flex-none h-full w-full justify-center px-4 py-2 text-xs sm:text-sm",
                         option.value === "ebay" &&
                           "data-active:bg-info/10 data-active:text-info dark:data-active:bg-info/8",
                         option.value === "physical" &&
@@ -282,7 +283,14 @@ export function EbayResaleCard({
             </div>
 
             <SectionLabel>Inputs</SectionLabel>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div
+              className={cn(
+                "grid gap-3",
+                isEbay
+                  ? "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                  : "mx-auto w-full max-w-md grid-cols-2 sm:max-w-lg",
+              )}
+            >
               {isEbay ? (
                 <>
                   <NumberField
