@@ -112,6 +112,48 @@ function NumberField({
   );
 }
 
+function SellingMethodToggle({
+  value,
+  onChange,
+}: {
+  value: SellingMethod;
+  onChange: (method: SellingMethod) => void;
+}) {
+  return (
+    <div
+      role="tablist"
+      aria-label="Selling method"
+      className="mx-auto grid w-full max-w-[400px] grid-cols-2 gap-1 rounded-xl border border-border/60 bg-muted/30 p-1 dark:bg-muted/20"
+    >
+      {SELLING_METHOD_OPTIONS.map((option) => {
+        const isActive = value === option.value;
+        const isEbayOption = option.value === "ebay";
+
+        return (
+          <button
+            key={option.value}
+            type="button"
+            role="tab"
+            aria-selected={isActive}
+            onClick={() => onChange(option.value)}
+            className={cn(
+              "h-11 rounded-[12px] border text-sm font-bold transition-all duration-200 ease-out",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
+              isActive
+                ? isEbayOption
+                  ? "border-info/40 bg-info/15 text-info shadow-sm dark:border-info/35 dark:bg-info/20"
+                  : "border-orange-accent/40 bg-orange-accent/15 text-orange-accent shadow-sm dark:border-orange-accent/35 dark:bg-orange-accent/20"
+                : "border-transparent bg-background/5 text-muted-foreground hover:border-border/50 hover:bg-muted/40 hover:text-foreground dark:bg-background/10",
+            )}
+          >
+            {option.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 function CurrencySelector({
   label,
   value,
@@ -255,31 +297,10 @@ export function EbayResaleCard({
               <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                 Selling method
               </p>
-              <Tabs
+              <SellingMethodToggle
                 value={inputs.sellingMethod}
-                onValueChange={(next) =>
-                  handleSellingMethodChange(next as SellingMethod)
-                }
-                className="w-full"
-              >
-                <TabsList className="mx-auto grid h-11 w-full max-w-md grid-cols-2 gap-0 p-[3px] sm:h-9">
-                  {SELLING_METHOD_OPTIONS.map((option) => (
-                    <TabsTrigger
-                      key={option.value}
-                      value={option.value}
-                      className={cn(
-                        "!flex-none h-full w-full justify-center px-4 py-2 text-xs sm:text-sm",
-                        option.value === "ebay" &&
-                          "data-active:bg-info/10 data-active:text-info dark:data-active:bg-info/8",
-                        option.value === "physical" &&
-                          "data-active:bg-orange-accent/10 data-active:text-orange-accent dark:data-active:bg-orange-accent/8",
-                      )}
-                    >
-                      {option.label}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
-              </Tabs>
+                onChange={handleSellingMethodChange}
+              />
             </div>
 
             <SectionLabel>Inputs</SectionLabel>
