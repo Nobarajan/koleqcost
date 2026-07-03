@@ -41,7 +41,7 @@ import {
   DISPLAY_CURRENCY_OPTIONS,
   SELLING_METHOD_OPTIONS,
 } from "@/lib/koleqcost/types";
-import { getVerdictTone } from "@/lib/koleqcost/tone";
+import { getVerdictTone, toneBadgeClasses } from "@/lib/koleqcost/tone";
 import { cn } from "@/lib/utils";
 
 type EbayResaleCardProps = {
@@ -63,21 +63,15 @@ function verdictBadge(verdict: ProfitVerdict) {
       return <Badge variant="destructive">Loss</Badge>;
     case "thin":
       return (
-        <Badge className="border-warning/30 bg-warning/10 text-warning">
-          Thin margin
-        </Badge>
+        <Badge className={toneBadgeClasses.warning}>Thin margin</Badge>
       );
     case "okay":
       return (
-        <Badge className="border-info/30 bg-info/10 text-info">
-          Okay flip
-        </Badge>
+        <Badge className={toneBadgeClasses.info}>Okay flip</Badge>
       );
     case "strong":
       return (
-        <Badge className="border-positive/30 bg-positive/10 text-positive">
-          Strong flip
-        </Badge>
+        <Badge className={toneBadgeClasses.positive}>Strong flip</Badge>
       );
     default:
       return null;
@@ -112,6 +106,7 @@ function NumberField({
         placeholder={placeholder}
         value={value === 0 ? "" : value}
         onChange={(e) => onChange(e.target.value)}
+        className="h-11 sm:h-8"
       />
     </div>
   );
@@ -135,9 +130,9 @@ function CurrencySelector({
         value={value}
         onValueChange={(next) => onChange(next as DisplayCurrency)}
       >
-        <TabsList className="h-8 w-full min-w-[220px] sm:w-auto">
+        <TabsList className="h-11 w-full min-w-0 sm:h-8 sm:w-auto">
           {DISPLAY_CURRENCY_OPTIONS.map((option) => (
-            <TabsTrigger key={option} value={option} className="px-2 text-xs">
+            <TabsTrigger key={option} value={option} className="min-h-10 flex-1 px-2 text-xs sm:min-h-0 sm:flex-none sm:px-2">
               {option === "ALL" ? "All" : option}
             </TabsTrigger>
           ))}
@@ -230,10 +225,10 @@ export function EbayResaleCard({
     <Collapsible open={open} onOpenChange={onOpenChange}>
       <Card
         size="sm"
-        className="transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
+        className="transition-all duration-200 sm:hover:-translate-y-0.5 sm:hover:shadow-md"
       >
         <CollapsibleTrigger className="w-full text-left">
-          <CardHeader className="cursor-pointer transition-colors hover:bg-muted/30">
+          <CardHeader className="min-h-11 cursor-pointer transition-colors hover:bg-muted/30 sm:min-h-0">
             <div className="flex items-start justify-between gap-3">
               <div className="space-y-1">
                 <CardTitle className="flex flex-wrap items-center gap-2">
@@ -266,13 +261,13 @@ export function EbayResaleCard({
                   handleSellingMethodChange(next as SellingMethod)
                 }
               >
-                <TabsList className="h-9 w-full sm:w-auto">
+                <TabsList className="h-11 w-full sm:h-9 sm:w-auto">
                   {SELLING_METHOD_OPTIONS.map((option) => (
                     <TabsTrigger
                       key={option.value}
                       value={option.value}
                       className={cn(
-                        "px-3 text-xs sm:text-sm",
+                        "min-h-10 flex-1 px-2 text-xs sm:min-h-0 sm:flex-none sm:px-3 sm:text-sm",
                         option.value === "ebay" &&
                           "data-active:bg-info/10 data-active:text-info dark:data-active:bg-info/8",
                         option.value === "physical" &&

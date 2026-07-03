@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/sheet";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   computeBuyingCost,
   computeResale,
@@ -41,6 +42,7 @@ import type {
   TaxPreset,
 } from "@/lib/koleqcost/types";
 import { SELLING_METHOD_OPTIONS, TAX_PRESET_OPTIONS, TAX_PRESET_SHORT_LABELS } from "@/lib/koleqcost/types";
+import { cn } from "@/lib/utils";
 
 type HistoryEditSheetProps = {
   entry: HistoryEntry | null;
@@ -77,6 +79,7 @@ function NumberField({
         placeholder={placeholder}
         value={value === 0 ? "" : value}
         onChange={(e) => onChange(e.target.value)}
+        className="h-11 sm:h-8"
       />
     </div>
   );
@@ -103,6 +106,7 @@ export function HistoryEditSheet({
   onOpenChange,
   onSave,
 }: HistoryEditSheetProps) {
+  const isMobile = useIsMobile();
   const [draftBuying, setDraftBuying] = useState<BuyingInputs | null>(null);
   const [draftResale, setDraftResale] = useState<ResaleInputs | null>(null);
   const [draftRates, setDraftRates] = useState<{ usdMyr: number } | null>(
@@ -184,8 +188,13 @@ export function HistoryEditSheet({
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
-        side="right"
-        className="flex w-full flex-col gap-0 p-0 sm:max-w-lg"
+        side={isMobile ? "bottom" : "right"}
+        className={cn(
+          "flex w-full flex-col gap-0 p-0",
+          isMobile
+            ? "h-[92dvh] max-h-[92dvh] rounded-t-xl"
+            : "sm:max-w-lg",
+        )}
       >
         <SheetHeader className="border-b px-4 py-4">
           <SheetTitle>Edit calculation</SheetTitle>
@@ -197,7 +206,7 @@ export function HistoryEditSheet({
         {entry && draftBuying && draftResale && draftRates ? (
           <>
             <ScrollArea className="min-h-0 flex-1">
-              <div className="space-y-6 px-4 py-4">
+              <div className="space-y-6 px-4 py-4 pb-36 sm:pb-4">
                 <FormSection title="Basic info">
                   <div className="space-y-1.5">
                     <Label htmlFor="edit-item-name" className="text-xs">
@@ -396,12 +405,12 @@ export function HistoryEditSheet({
                       )
                     }
                   >
-                    <TabsList className="h-9 w-full">
+                    <TabsList className="h-11 w-full sm:h-9">
                       {SELLING_METHOD_OPTIONS.map((option) => (
                         <TabsTrigger
                           key={option.value}
                           value={option.value}
-                          className="flex-1 text-xs sm:text-sm"
+                          className="min-h-10 flex-1 text-xs sm:min-h-0 sm:text-sm"
                         >
                           {option.label}
                         </TabsTrigger>
@@ -574,11 +583,20 @@ export function HistoryEditSheet({
               </div>
             </ScrollArea>
 
-            <SheetFooter className="border-t px-4 py-4 sm:flex-row sm:justify-end">
-              <Button variant="outline" onClick={() => onOpenChange(false)}>
+            <SheetFooter className="sticky bottom-0 z-10 shrink-0 gap-2 border-t bg-popover/95 px-4 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-[0_-6px_16px_oklch(0_0_0/8%)] backdrop-blur-sm sm:static sm:flex-row sm:justify-end sm:bg-popover sm:pb-4 sm:shadow-none">
+              <Button
+                variant="outline"
+                className="min-h-11 w-full sm:min-h-0 sm:w-auto"
+                onClick={() => onOpenChange(false)}
+              >
                 Cancel
               </Button>
-              <Button onClick={handleSave}>Save changes</Button>
+              <Button
+                className="min-h-11 w-full sm:min-h-0 sm:w-auto"
+                onClick={handleSave}
+              >
+                Save changes
+              </Button>
             </SheetFooter>
           </>
         ) : null}

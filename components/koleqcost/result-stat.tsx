@@ -38,8 +38,8 @@ export function ResultStat({
   return (
     <div
       className={cn(
-        "min-w-0 overflow-hidden rounded-lg border px-3 py-2.5 transition-all duration-200 ease-out",
-        spansTwoCols && "shadow-sm hover:-translate-y-0.5 hover:shadow-md",
+        "min-w-0 overflow-hidden rounded-lg border px-3.5 py-3 transition-all duration-200 ease-out sm:px-3 sm:py-2.5",
+        spansTwoCols && "shadow-sm sm:hover:-translate-y-0.5 sm:hover:shadow-md",
         hasTone || spansTwoCols
           ? toneContainerClasses[tone]
           : "border-border/60 bg-muted/30",
@@ -60,9 +60,9 @@ export function ResultStat({
       <p
         className={cn(
           "mt-1 font-mono font-semibold tabular-nums tracking-tight break-words transition-all duration-200 ease-out",
-          isHero && "text-2xl sm:text-3xl lg:text-4xl",
-          isSubtotal && "text-lg sm:text-xl",
-          !spansTwoCols && "text-sm sm:text-base",
+          isHero && "text-xl min-[380px]:text-2xl sm:text-3xl lg:text-4xl",
+          isSubtotal && "text-base sm:text-lg lg:text-xl",
+          !spansTwoCols && "text-base sm:text-sm lg:text-base",
           toneTextClasses[tone],
         )}
       >

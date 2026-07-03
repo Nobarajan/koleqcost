@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatRate } from "@/lib/koleqcost/format";
+import { toneBadgeClasses } from "@/lib/koleqcost/tone";
 import { cn } from "@/lib/utils";
 
 type KoleqCostHeaderProps = {
@@ -28,23 +29,22 @@ export function KoleqCostHeader({
 }: KoleqCostHeaderProps) {
   return (
     <header className="space-y-3 border-b border-border/60 pb-5">
-      <div className="flex items-start justify-between gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex min-w-0 flex-wrap items-center gap-2.5">
-          <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+          <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary sm:size-8">
             <Gem className="size-4" />
           </div>
           <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
             KoleqCost
           </h1>
-          <Badge className="border-warning/30 bg-warning/10 text-[10px] uppercase tracking-wide text-warning">
+          <Badge className={cn("text-[10px] uppercase tracking-wide", toneBadgeClasses.warning)}>
             Estimate only
           </Badge>
         </div>
 
-        <div className="flex shrink-0 flex-col items-end gap-1">
-          <div className="flex items-center gap-2">
-          <div className="flex items-center gap-0.5 text-xs">
-            <div className="flex items-baseline gap-1.5">
+        <div className="flex min-w-0 items-center justify-between gap-2 sm:flex-col sm:items-end sm:justify-start">
+          <div className="flex items-center gap-1 sm:gap-2">
+            <div className="flex items-baseline gap-1.5 rounded-lg border border-border/60 bg-muted/20 px-2.5 py-1.5 text-xs sm:border-0 sm:bg-transparent sm:p-0">
               <span className="font-medium uppercase tracking-wide text-muted-foreground">
                 USD/MYR
               </span>
@@ -59,29 +59,29 @@ export function KoleqCostHeader({
             <Button
               variant="ghost"
               size="icon-sm"
-              className="size-6 shrink-0 text-muted-foreground hover:text-foreground"
+              className="size-11 shrink-0 text-muted-foreground hover:text-foreground sm:size-7"
               onClick={onRefresh}
               disabled={isRefreshing}
               aria-label="Refresh exchange rate"
             >
               <RefreshCw
-                className={cn("size-3", isRefreshing && "animate-spin")}
+                className={cn("size-4 sm:size-3", isRefreshing && "animate-spin")}
               />
             </Button>
-          </div>
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            onClick={onToggleTheme}
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              className="size-11 shrink-0 sm:size-7"
+              onClick={onToggleTheme}
               aria-label={
                 isDark ? "Switch to light mode" : "Switch to dark mode"
               }
-          >
-            {isDark ? <Sun /> : <Moon />}
-          </Button>
+            >
+              {isDark ? <Sun className="size-4 sm:size-3.5" /> : <Moon className="size-4 sm:size-3.5" />}
+            </Button>
           </div>
           {fetchError ? (
-            <p className="max-w-[220px] text-right text-[10px] leading-snug text-warning sm:max-w-xs">
+            <p className="w-full text-left text-[11px] leading-snug text-warning sm:max-w-xs sm:text-right sm:text-[10px]">
               {fetchError}
             </p>
           ) : null}
@@ -96,7 +96,7 @@ export function KoleqCostHeader({
           Calculate landed cost, resale price, fees, profit, ROI, and
           break-even value for collectibles.
         </p>
-        <p className="flex items-start gap-1.5 text-[11px] leading-relaxed text-muted-foreground/90">
+        <p className="flex items-start gap-1.5 text-[11px] leading-relaxed text-muted-foreground/90 sm:text-xs">
           <Info className="mt-0.5 size-3.5 shrink-0 text-muted-foreground/70" />
           <span>
             Estimates only — customs, courier fees, exchange rates, marketplace

@@ -33,6 +33,7 @@ import type {
   TaxPreset,
 } from "@/lib/koleqcost/types";
 import { TAX_BASIS_LABELS, TAX_PRESET_OPTIONS, TAX_PRESET_SHORT_LABELS, TAX_PRESET_SUMMARY_LABELS } from "@/lib/koleqcost/types";
+import { toneBadgeClasses } from "@/lib/koleqcost/tone";
 import { cn } from "@/lib/utils";
 
 type BuyingCostCardProps = {
@@ -62,7 +63,7 @@ function NumberField({
 }) {
   return (
     <div className="space-y-1.5">
-      <Label htmlFor={id} className="text-xs">
+      <Label htmlFor={id} className="text-xs sm:text-xs">
         {label}
       </Label>
       <Input
@@ -73,6 +74,7 @@ function NumberField({
         placeholder={placeholder}
         value={value === 0 ? "" : value}
         onChange={(e) => onChange(e.target.value)}
+        className="h-11 sm:h-8"
       />
     </div>
   );
@@ -86,25 +88,19 @@ export function TaxPresetBadge({ preset }: { preset: TaxPreset }) {
   switch (preset) {
     case "courier":
       return (
-        <Badge className="border-info/30 bg-info/10 text-info">
-          Courier
-        </Badge>
+        <Badge className={toneBadgeClasses.info}>Courier</Badge>
       );
     case "traveller":
       return (
-        <Badge className="border-purple-accent/30 bg-purple-accent/10 text-purple-accent">
-          Traveller
-        </Badge>
+        <Badge className={toneBadgeClasses.purple}>Traveller</Badge>
       );
     case "manual":
       return (
-        <Badge className="border-purple-accent/30 bg-purple-accent/10 text-purple-accent">
-          Manual
-        </Badge>
+        <Badge className={toneBadgeClasses.purple}>Manual</Badge>
       );
     case "custom":
       return (
-        <Badge variant="outline" className="text-muted-foreground">
+        <Badge variant="outline" className={toneBadgeClasses.neutral}>
           Custom Rates
         </Badge>
       );
@@ -123,7 +119,7 @@ function TaxRatesSummaryChip({
   return (
     <Badge
       variant="secondary"
-      className="border-border/60 bg-background/80 px-2.5 py-1 font-normal text-muted-foreground"
+      className="border-border/60 bg-background/80 px-2.5 py-1.5 font-normal whitespace-normal text-muted-foreground"
     >
       {importDutyPct}% duty + {salesTaxPct}% sales + {exciseDutyPct}% excise
     </Badge>
@@ -174,7 +170,7 @@ export function BuyingCostCard({
   return (
     <Card
       size="sm"
-      className="transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
+      className="transition-all duration-200 sm:hover:-translate-y-0.5 sm:hover:shadow-md"
     >
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
@@ -233,18 +229,21 @@ export function BuyingCostCard({
               placeholder="e.g. PSA 10 Charizard"
               value={inputs.note}
               onChange={(e) => onInputChange("note", e.target.value)}
+              className="h-11 sm:h-8"
             />
           </div>
         </div>
 
         <Collapsible open={taxPresetOpen} onOpenChange={setTaxPresetOpen}>
           <div className="overflow-hidden rounded-lg border border-border/60 bg-muted/20">
-            <CollapsibleTrigger className="flex w-full items-center justify-between gap-2 px-3 py-2.5 text-left transition-colors hover:bg-muted/40">
-              <p className="flex min-w-0 flex-1 items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-                <Landmark className="size-3.5 shrink-0 text-warning" />
-                Tax preset
+            <CollapsibleTrigger className="flex min-h-11 w-full items-center justify-between gap-2 px-3 py-3 text-left transition-colors hover:bg-muted/40 sm:min-h-0 sm:py-2.5">
+              <p className="flex min-w-0 flex-1 flex-col gap-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground sm:flex-row sm:items-center sm:gap-1.5">
+                <span className="flex items-center gap-1.5">
+                  <Landmark className="size-3.5 shrink-0 text-warning" />
+                  Tax preset
+                </span>
                 {selectedPreset ? (
-                  <span className="ml-1 truncate normal-case tracking-normal text-foreground">
+                  <span className="truncate normal-case tracking-normal text-foreground">
                     ({TAX_PRESET_SUMMARY_LABELS[inputs.taxPreset]})
                   </span>
                 ) : null}
@@ -383,7 +382,7 @@ export function BuyingCostCard({
 
         <Collapsible open={courierFeesOpen} onOpenChange={setCourierFeesOpen}>
           <div className="overflow-hidden rounded-lg border border-border/60 bg-muted/20">
-            <CollapsibleTrigger className="flex w-full items-center justify-between px-3 py-2.5 text-left transition-colors hover:bg-muted/40">
+            <CollapsibleTrigger className="flex min-h-11 w-full items-center justify-between px-3 py-3 text-left transition-colors hover:bg-muted/40 sm:min-h-0 sm:py-2.5">
               <p className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                 <Truck className="size-3.5 text-orange-accent" />
                 Courier/admin fees

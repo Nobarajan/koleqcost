@@ -48,15 +48,15 @@ export function CurrencyStat({
   const hasTone = highlight !== "default";
   const valueClass = cn(
     "font-mono font-semibold tabular-nums tracking-tight break-words transition-all duration-200 ease-out",
-    isHero ? "text-2xl sm:text-3xl lg:text-4xl" : "text-sm sm:text-base",
+    isHero ? "text-xl min-[380px]:text-2xl sm:text-3xl lg:text-4xl" : "text-base sm:text-sm lg:text-base",
     toneTextClasses[tone],
   );
 
   return (
     <div
       className={cn(
-        "min-w-0 overflow-hidden rounded-lg border px-3 py-2.5 transition-all duration-200 ease-out",
-        isHero && "shadow-sm hover:-translate-y-0.5 hover:shadow-md",
+        "min-w-0 overflow-hidden rounded-lg border px-3.5 py-3 transition-all duration-200 ease-out sm:px-3 sm:py-2.5",
+        isHero && "shadow-sm sm:hover:-translate-y-0.5 sm:hover:shadow-md",
         hasTone || isHero
           ? toneContainerClasses[tone]
           : "border-border/60 bg-muted/30",

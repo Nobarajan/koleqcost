@@ -34,14 +34,14 @@ export function HistoryToolbar({
         <Label htmlFor="history-search" className="sr-only">
           Search history
         </Label>
-        <Search className="pointer-events-none absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2 text-muted-foreground" />
+        <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground sm:left-2.5 sm:size-3.5" />
         <Input
           id="history-search"
           type="search"
           placeholder="Search item or notes…"
           value={search}
           onChange={(event) => onSearchChange(event.target.value)}
-          className="h-8 pl-7 text-sm"
+          className="h-11 pl-8 text-base sm:h-8 sm:pl-7 sm:text-sm"
         />
       </div>
 
@@ -54,7 +54,7 @@ export function HistoryToolbar({
       >
         <SelectTrigger
           id="history-sort"
-          className="h-8 w-full bg-background text-sm sm:w-40"
+          className="h-11 w-full bg-background text-base sm:h-8 sm:w-40 sm:text-sm"
         >
           <SelectValue placeholder="Sort by">{sortLabel}</SelectValue>
         </SelectTrigger>

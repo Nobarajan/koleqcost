@@ -38,6 +38,7 @@ import {
 import {
   getAmountTone,
   getVerdictTone,
+  toneBadgeClasses,
   toneTextClasses,
   type Tone,
 } from "@/lib/koleqcost/tone";
@@ -65,12 +66,12 @@ function SellingMethodBadge({
 
   if (method === "ebay") {
     return (
-      <Badge className="border-info/30 bg-info/10 text-info">{label}</Badge>
+      <Badge className={toneBadgeClasses.info}>{label}</Badge>
     );
   }
 
   return (
-    <Badge className="border-orange-accent/30 bg-orange-accent/10 text-orange-accent">
+    <Badge className="border-orange-accent/30 bg-orange-accent/10 text-orange-accent dark:border-orange-accent/45 dark:bg-orange-accent/16 dark:text-[oklch(0.88_0.13_55)]">
       {label}
     </Badge>
   );
@@ -82,19 +83,15 @@ function VerdictBadge({ verdict }: { verdict: ProfitVerdict }) {
       return <Badge variant="destructive">Loss</Badge>;
     case "thin":
       return (
-        <Badge className="border-warning/30 bg-warning/10 text-warning">
-          Thin margin
-        </Badge>
+        <Badge className={toneBadgeClasses.warning}>Thin margin</Badge>
       );
     case "okay":
       return (
-        <Badge className="border-info/30 bg-info/10 text-info">Okay flip</Badge>
+        <Badge className={toneBadgeClasses.info}>Okay flip</Badge>
       );
     case "strong":
       return (
-        <Badge className="border-positive/30 bg-positive/10 text-positive">
-          Strong flip
-        </Badge>
+        <Badge className={toneBadgeClasses.positive}>Strong flip</Badge>
       );
     default:
       return null;
@@ -130,13 +127,13 @@ function DetailRow({
   emphasis?: boolean;
 }) {
   return (
-    <div className="flex items-baseline justify-between gap-3 border-b border-border/40 py-2.5 last:border-0">
-      <span className="min-w-0 shrink text-sm text-muted-foreground">
+    <div className="flex items-baseline justify-between gap-3 border-b border-border/40 py-3 last:border-0 sm:py-2.5">
+      <span className="min-w-0 flex-1 shrink text-sm text-muted-foreground">
         {label}
       </span>
       <span
         className={cn(
-          "max-w-[58%] text-right font-mono text-sm tabular-nums break-all",
+          "max-w-[52%] shrink-0 text-right font-mono text-sm tabular-nums break-all sm:max-w-[58%]",
           emphasis && "font-semibold",
           toneTextClasses[tone],
         )}
@@ -234,17 +231,17 @@ export function HistoryDetailSheet({
               <SellingMethodBadge method={entry.resale.sellingMethod} />
               {verdict ? <VerdictBadge verdict={verdict} /> : null}
               {!hasSellingPrice ? (
-                <Badge variant="outline" className="text-muted-foreground">
+                <Badge variant="outline" className={toneBadgeClasses.neutral}>
                   No resale price
                 </Badge>
               ) : null}
               {entry.notes.trim() ? (
-                <Badge variant="outline" className="max-w-full truncate">
+                <Badge variant="outline" className={cn("max-w-full truncate", toneBadgeClasses.neutral)}>
                   {entry.notes.trim()}
                 </Badge>
               ) : null}
               {entry.pinned ? (
-                <Badge className="border-gold-accent/40 bg-gold-accent/10 text-gold-accent">
+                <Badge className={toneBadgeClasses.gold}>
                   <Star className="mr-1 size-3 fill-gold-accent" />
                   Pinned
                 </Badge>
@@ -256,7 +253,7 @@ export function HistoryDetailSheet({
             <div className="space-y-5 px-4 py-4">
               <div className="space-y-2">
                 <SectionLabel>Deal summary</SectionLabel>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 gap-2 min-[380px]:grid-cols-2">
                   <ResultStat
                     label="Landed cost"
                     value={
@@ -479,16 +476,28 @@ export function HistoryDetailSheet({
             </div>
           </ScrollArea>
 
-          <SheetFooter className="shrink-0 border-t px-4 py-4 sm:flex-row sm:justify-end">
-            <Button variant="outline" onClick={handleEdit}>
+          <SheetFooter className="gap-2 border-t px-4 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:flex-row sm:justify-end sm:pb-4">
+            <Button
+              variant="outline"
+              className="min-h-11 w-full sm:min-h-0 sm:w-auto"
+              onClick={handleEdit}
+            >
               <Pencil className="size-3.5" />
               Edit
             </Button>
-            <Button variant="outline" onClick={handleDuplicate}>
+            <Button
+              variant="outline"
+              className="min-h-11 w-full sm:min-h-0 sm:w-auto"
+              onClick={handleDuplicate}
+            >
               <Copy className="size-3.5" />
               Duplicate
             </Button>
-            <Button variant="destructive" onClick={() => setDeleteOpen(true)}>
+            <Button
+              variant="destructive"
+              className="min-h-11 w-full sm:min-h-0 sm:w-auto"
+              onClick={() => setDeleteOpen(true)}
+            >
               <Trash2 className="size-3.5" />
               Delete
             </Button>

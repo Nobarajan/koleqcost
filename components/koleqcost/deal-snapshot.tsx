@@ -12,6 +12,7 @@ import { formatMYR, formatPercent } from "@/lib/koleqcost/format";
 import {
   getAmountTone,
   getVerdictTone,
+  toneBadgeClasses,
   toneContainerClasses,
   toneIconClasses,
   toneTextClasses,
@@ -47,25 +48,25 @@ function SnapshotCard({
   return (
     <div
       className={cn(
-        "min-w-0 overflow-hidden rounded-xl border px-3.5 py-3 shadow-sm transition-all duration-200 ease-out hover:-translate-y-0.5 hover:shadow-md",
+        "min-w-0 rounded-xl border px-3.5 py-3.5 shadow-sm transition-all duration-200 ease-out sm:py-3 sm:hover:-translate-y-0.5 sm:hover:shadow-md",
         toneContainerClasses[tone],
       )}
     >
       <div className="flex items-start justify-between gap-2">
-        <p className="truncate text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+        <p className="min-w-0 flex-1 text-[10px] font-semibold uppercase leading-snug tracking-[0.12em] text-muted-foreground sm:tracking-[0.14em]">
           {label}
         </p>
         <Icon className={cn("size-4 shrink-0", toneIconClasses[tone])} />
       </div>
       <p
         className={cn(
-          "mt-2 font-mono text-xl font-semibold tabular-nums tracking-tight break-words transition-all duration-200 ease-out sm:text-2xl lg:text-3xl",
+          "mt-2 overflow-x-auto font-mono text-base font-semibold tabular-nums tracking-tight whitespace-nowrap [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden min-[420px]:text-lg sm:text-2xl lg:text-3xl",
           toneTextClasses[tone],
         )}
       >
         {value}
       </p>
-      <p className="mt-1 truncate text-[11px] text-muted-foreground">
+      <p className="mt-1 line-clamp-2 text-[11px] leading-snug text-muted-foreground sm:truncate sm:leading-normal">
         {subtitle}
       </p>
     </div>
@@ -103,14 +104,21 @@ export function DealSnapshot({
 
   return (
     <section className="space-y-2">
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="text-sm font-semibold tracking-tight">Deal Snapshot</h2>
         {showResaleMetrics && resaleResults.verdict ? (
           <span
             className={cn(
               "rounded-full border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide",
-              toneContainerClasses[roiTone],
-              toneTextClasses[roiTone],
+              toneBadgeClasses[
+                roiTone === "positive"
+                  ? "positive"
+                  : roiTone === "warning"
+                    ? "warning"
+                    : roiTone === "negative"
+                      ? "negative"
+                      : "neutral"
+              ],
             )}
           >
             {resaleResults.verdict === "loss"
@@ -124,7 +132,7 @@ export function DealSnapshot({
         ) : null}
       </div>
 
-      <div className="grid grid-cols-2 gap-2.5 sm:gap-3 lg:grid-cols-4">
+      <div className="grid min-w-0 grid-cols-1 gap-2.5 min-[420px]:grid-cols-2 sm:gap-3 lg:grid-cols-4">
         <SnapshotCard
           label="Total Landed Cost"
           value={

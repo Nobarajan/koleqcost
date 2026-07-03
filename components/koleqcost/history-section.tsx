@@ -126,7 +126,7 @@ export function HistorySection({
   return (
     <Card
       size="sm"
-      className="transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
+      className="transition-all duration-200 sm:hover:-translate-y-0.5 sm:hover:shadow-md"
     >
       <CardHeader>
         <div className="flex flex-wrap items-start justify-between gap-3">
@@ -139,14 +139,18 @@ export function HistorySection({
               Your saved collection — edit, duplicate, and pin anytime.
             </CardDescription>
           </div>
-          <div className="flex flex-wrap gap-2">
-            <Button onClick={onSave} disabled={!canSave} size="sm">
+          <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap">
+            <Button
+              onClick={onSave}
+              disabled={!canSave}
+              className="min-h-11 w-full sm:min-h-0 sm:w-auto"
+            >
               Save calculation
             </Button>
             {history.length > 0 && !selectionMode ? (
               <Button
                 variant="outline"
-                size="sm"
+                className="min-h-11 w-full sm:min-h-0 sm:w-auto"
                 onClick={() => setSelectionMode(true)}
               >
                 Select
@@ -156,7 +160,7 @@ export function HistorySection({
               <AlertDialog>
                 <AlertDialogTrigger
                   render={
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" className="min-h-11 w-full sm:min-h-0 sm:w-auto">
                       Clear all history
                     </Button>
                   }
@@ -193,13 +197,13 @@ export function HistorySection({
         ) : null}
 
         {selectionMode ? (
-          <div className="flex flex-wrap items-center gap-2 rounded-lg border border-border/60 bg-muted/20 px-3 py-2">
-            <p className="mr-auto text-sm text-muted-foreground">
+          <div className="flex flex-col gap-2 rounded-lg border border-border/60 bg-muted/20 px-3 py-3 sm:flex-row sm:flex-wrap sm:items-center">
+            <p className="text-sm text-muted-foreground sm:mr-auto">
               {selectedCount} selected
             </p>
             <Button
               variant="outline"
-              size="sm"
+              className="min-h-11 w-full sm:min-h-0 sm:w-auto"
               onClick={selectAllFiltered}
               disabled={filteredHistory.length === 0}
             >
@@ -207,7 +211,7 @@ export function HistorySection({
             </Button>
             <Button
               variant="outline"
-              size="sm"
+              className="min-h-11 w-full sm:min-h-0 sm:w-auto"
               onClick={clearSelection}
               disabled={selectedCount === 0}
             >
@@ -215,13 +219,17 @@ export function HistorySection({
             </Button>
             <Button
               variant="destructive"
-              size="sm"
+              className="min-h-11 w-full sm:min-h-0 sm:w-auto"
               disabled={selectedCount === 0}
               onClick={() => setBulkDeleteOpen(true)}
             >
               Delete selected
             </Button>
-            <Button variant="ghost" size="sm" onClick={exitSelectionMode}>
+            <Button
+              variant="ghost"
+              className="min-h-11 w-full sm:min-h-0 sm:w-auto"
+              onClick={exitSelectionMode}
+            >
               Cancel
             </Button>
           </div>

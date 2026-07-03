@@ -42,8 +42,8 @@ export function RiskWarningPanel({ cifMyr, taxPreset }: RiskWarningPanelProps) {
       <div
         className={
           isWarning
-            ? "flex items-start gap-2 rounded-lg border border-warning/30 bg-warning/10 px-3 py-2 text-sm text-warning"
-            : "flex items-start gap-2 rounded-lg border border-border/60 bg-muted/30 px-3 py-2 text-sm text-muted-foreground"
+            ? "flex items-start gap-2.5 rounded-lg border border-warning/30 bg-warning/10 px-3.5 py-3 text-sm leading-relaxed text-warning sm:px-3 sm:py-2"
+            : "flex items-start gap-2.5 rounded-lg border border-border/60 bg-muted/30 px-3.5 py-3 text-sm leading-relaxed text-muted-foreground sm:px-3 sm:py-2"
         }
       >
         {isWarning ? (

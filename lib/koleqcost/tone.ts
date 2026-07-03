@@ -50,3 +50,19 @@ export const toneIconClasses: Record<Tone, string> = {
   gold: "text-gold-accent",
   neutral: "text-muted-foreground",
 };
+
+/** Badge chips — slightly stronger contrast in dark mode */
+export const toneBadgeClasses: Record<Tone, string> = {
+  positive:
+    "border-positive/30 bg-positive/10 text-positive dark:border-positive/45 dark:bg-positive/16 dark:text-[oklch(0.86_0.14_158)]",
+  negative:
+    "border-destructive/30 bg-destructive/10 text-destructive dark:border-destructive/45 dark:bg-destructive/16 dark:text-[oklch(0.84_0.14_25)]",
+  warning:
+    "border-warning/30 bg-warning/10 text-warning dark:border-warning/45 dark:bg-warning/16 dark:text-[oklch(0.88_0.14_80)]",
+  info: "border-info/30 bg-info/10 text-info dark:border-info/45 dark:bg-info/16 dark:text-[oklch(0.88_0.12_250)]",
+  purple:
+    "border-purple-accent/30 bg-purple-accent/10 text-purple-accent dark:border-purple-accent/45 dark:bg-purple-accent/16 dark:text-[oklch(0.86_0.13_300)]",
+  gold: "border-gold-accent/40 bg-gold-accent/10 text-gold-accent dark:border-gold-accent/45 dark:bg-gold-accent/16 dark:text-[oklch(0.9_0.13_85)]",
+  neutral:
+    "border-border text-muted-foreground dark:border-border dark:bg-muted/40 dark:text-[oklch(0.78_0.02_260)]",
+};

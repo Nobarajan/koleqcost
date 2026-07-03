@@ -92,6 +92,18 @@ export function KoleqCostView() {
     setHydrated(true);
   }, []);
 
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", isDark);
+    const themeColor = isDark ? "#252628" : "#fbfbf9";
+    let meta = document.querySelector('meta[name="theme-color"]');
+    if (!meta) {
+      meta = document.createElement("meta");
+      meta.setAttribute("name", "theme-color");
+      document.head.appendChild(meta);
+    }
+    meta.setAttribute("content", themeColor);
+  }, [isDark]);
+
   const fetchRates = useCallback(async () => {
     setIsLoadingRates(true);
     setFetchError(null);
@@ -294,17 +306,12 @@ export function KoleqCostView() {
   };
 
   return (
-    <div
-      className={cn(
-        "koleqcost-theme relative min-h-screen bg-background text-foreground",
-        isDark && "dark",
-      )}
-    >
+    <div className="relative flex min-h-dvh flex-1 flex-col overflow-x-hidden bg-background text-foreground pt-[env(safe-area-inset-top)] pb-[calc(env(safe-area-inset-bottom)+6rem)] sm:pb-8">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-48 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/8 via-transparent to-transparent"
       />
-      <div className="relative mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 py-6 sm:px-6 sm:py-8">
+      <div className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col gap-5 px-3 py-5 sm:gap-4 sm:px-6 sm:py-8">
         <KoleqCostHeader
           isDark={isDark}
           onToggleTheme={handleToggleTheme}
@@ -385,6 +392,8 @@ export function KoleqCostView() {
         position="bottom-right"
         richColors
         closeButton
+        offset={16}
+        mobileOffset={{ bottom: "max(1rem, env(safe-area-inset-bottom))" }}
         icons={{
           success: <CircleCheckIcon className="size-4" />,
           info: <InfoIcon className="size-4" />,

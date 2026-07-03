@@ -28,7 +28,7 @@ import {
   getHasSellingPrice,
 } from "@/lib/koleqcost/history";
 import { formatMYR, formatPercent } from "@/lib/koleqcost/format";
-import { getAmountTone, getVerdictTone, toneTextClasses } from "@/lib/koleqcost/tone";
+import { getAmountTone, getVerdictTone, toneBadgeClasses, toneTextClasses } from "@/lib/koleqcost/tone";
 import type { HistoryEntry, ProfitVerdict } from "@/lib/koleqcost/types";
 import { SELLING_METHOD_OPTIONS } from "@/lib/koleqcost/types";
 import { cn } from "@/lib/utils";
@@ -73,12 +73,12 @@ function SellingMethodBadge({
 
   if (method === "ebay") {
     return (
-      <Badge className="border-info/30 bg-info/10 text-info">{label}</Badge>
+      <Badge className={toneBadgeClasses.info}>{label}</Badge>
     );
   }
 
   return (
-    <Badge className="border-orange-accent/30 bg-orange-accent/10 text-orange-accent">
+    <Badge className="border-orange-accent/30 bg-orange-accent/10 text-orange-accent dark:border-orange-accent/45 dark:bg-orange-accent/16 dark:text-[oklch(0.88_0.13_55)]">
       {label}
     </Badge>
   );
@@ -90,23 +90,43 @@ function VerdictBadge({ verdict }: { verdict: ProfitVerdict }) {
       return <Badge variant="destructive">Loss</Badge>;
     case "thin":
       return (
-        <Badge className="border-warning/30 bg-warning/10 text-warning">
-          Thin margin
-        </Badge>
+        <Badge className={toneBadgeClasses.warning}>Thin margin</Badge>
       );
     case "okay":
       return (
-        <Badge className="border-info/30 bg-info/10 text-info">Okay flip</Badge>
+        <Badge className={toneBadgeClasses.info}>Okay flip</Badge>
       );
     case "strong":
       return (
-        <Badge className="border-positive/30 bg-positive/10 text-positive">
-          Strong flip
-        </Badge>
+        <Badge className={toneBadgeClasses.positive}>Strong flip</Badge>
       );
     default:
       return null;
   }
+}
+
+function MetricRow({
+  label,
+  value,
+  toneClass,
+}: {
+  label: string;
+  value: string;
+  toneClass?: string;
+}) {
+  return (
+    <div className="flex items-baseline justify-between gap-3 font-mono text-xs">
+      <span className="shrink-0 text-muted-foreground">{label}</span>
+      <span
+        className={cn(
+          "min-w-0 overflow-x-auto text-right tabular-nums whitespace-nowrap [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+          toneClass,
+        )}
+      >
+        {value}
+      </span>
+    </div>
+  );
 }
 
 function CompactMetrics({
@@ -140,11 +160,14 @@ function CompactMetrics({
     );
   }
 
+  const resaleText =
+    sellingPriceMyr !== null ? formatMYR(sellingPriceMyr) : "—";
+
   const segments: ReactNode[] = [
     <span key="flow">
       {landedText}
       <span className="text-muted-foreground"> → </span>
-      {sellingPriceMyr !== null ? formatMYR(sellingPriceMyr) : "—"}
+      {resaleText}
     </span>,
   ];
 
@@ -182,16 +205,44 @@ function CompactMetrics({
   }
 
   return (
-    <p className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 font-mono text-xs sm:text-sm">
-      {segments.map((segment, index) => (
-        <Fragment key={index}>
-          {index > 0 ? (
-            <span className="text-muted-foreground">·</span>
-          ) : null}
-          {segment}
-        </Fragment>
-      ))}
-    </p>
+    <>
+      <div className="space-y-1 rounded-md border border-border/50 bg-muted/20 px-2.5 py-2 sm:hidden">
+        <MetricRow label="Landed" value={landedText} />
+        <MetricRow label="Resale" value={resaleText} />
+        {profitMyr !== null ? (
+          <MetricRow
+            label="Profit"
+            value={formatSignedMYR(profitMyr)}
+            toneClass={toneTextClasses[getAmountTone(profitMyr)]}
+          />
+        ) : null}
+        {profitAfterMyr !== null ? (
+          <MetricRow
+            label={`After ${resalePct}%`}
+            value={formatSignedMYR(profitAfterMyr)}
+            toneClass={toneTextClasses[getAmountTone(profitAfterMyr)]}
+          />
+        ) : null}
+        {roiPct !== null ? (
+          <MetricRow
+            label="ROI"
+            value={formatPercent(roiPct)}
+            toneClass={toneTextClasses[getVerdictTone(verdict)]}
+          />
+        ) : null}
+      </div>
+
+      <p className="hidden flex-wrap items-center gap-x-1.5 gap-y-0.5 font-mono text-sm sm:flex">
+        {segments.map((segment, index) => (
+          <Fragment key={index}>
+            {index > 0 ? (
+              <span className="text-muted-foreground">·</span>
+            ) : null}
+            {segment}
+          </Fragment>
+        ))}
+      </p>
+    </>
   );
 }
 
@@ -250,7 +301,7 @@ function InlineItemName({
         value={draft}
         placeholder="Untitled"
         aria-label="Item name"
-        className="h-7 w-auto min-w-[6rem] max-w-full flex-none px-2 text-sm font-medium"
+        className="h-10 w-full min-w-[8rem] flex-none px-2.5 text-base font-medium sm:h-7 sm:w-auto sm:min-w-[6rem] sm:px-2 sm:text-sm"
         style={{ width: `${Math.max(draft.length, 8)}ch` }}
         onClick={(event) => event.stopPropagation()}
         onMouseDown={(event) => event.stopPropagation()}
@@ -274,7 +325,7 @@ function InlineItemName({
   return (
     <button
       type="button"
-      className="inline-block max-w-full truncate rounded-sm text-left text-sm font-medium hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 cursor-text"
+      className="inline-block max-w-full truncate rounded-sm py-1 text-left text-sm font-medium hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 cursor-text sm:py-0"
       onClick={(event) => {
         event.stopPropagation();
         setIsEditing(true);
@@ -340,15 +391,16 @@ export function HistoryCard({
           }
         }}
         className={cn(
-          "flex flex-col gap-1.5 rounded-lg border border-border/60 bg-card px-3 py-2.5 transition-colors duration-150 sm:px-4 sm:py-3",
+          "flex flex-col gap-2 rounded-lg border border-border/60 bg-card px-3 py-3 transition-colors duration-150 sm:gap-1.5 sm:px-4 sm:py-3",
           entry.pinned && "border-gold-accent/50 bg-gold-accent/5",
           isInteractive &&
-            "cursor-pointer hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
+            "cursor-pointer hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 active:bg-muted/60",
         )}
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-start gap-2">
           {selectionMode ? (
             <div
+              className="flex shrink-0 items-center py-0.5"
               onClick={(event) => event.stopPropagation()}
               onKeyDown={(event) => event.stopPropagation()}
             >
@@ -358,11 +410,11 @@ export function HistoryCard({
                   onSelectedChange?.(checked === true)
                 }
                 aria-label={`Select ${itemName}`}
-                className="size-4 shrink-0"
+                className="size-5 shrink-0 sm:size-4"
               />
             </div>
           ) : null}
-          <div className="min-w-0 max-w-[55%] shrink sm:max-w-[65%]">
+          <div className="min-w-0 flex-1">
             <InlineItemName
               entryId={entry.id}
               name={entry.buying.note}
@@ -372,30 +424,32 @@ export function HistoryCard({
             />
           </div>
 
-          <div className="min-w-0 flex-1" aria-hidden />
-          <div
-            className="flex shrink-0 items-center gap-1"
-            onClick={(event) => event.stopPropagation()}
-            onKeyDown={(event) => event.stopPropagation()}
-          >
-            <SellingMethodBadge method={entry.resale.sellingMethod} />
-            {verdict ? <VerdictBadge verdict={verdict} /> : null}
-
-            {!selectionMode ? (
+          {!selectionMode ? (
+            <div
+              className="flex shrink-0 items-center"
+              onClick={(event) => event.stopPropagation()}
+              onKeyDown={(event) => event.stopPropagation()}
+            >
               <DropdownMenu>
                 <DropdownMenuTrigger
                   render={
                     <Button
                       variant="ghost"
                       size="icon-sm"
-                      className="size-7 shrink-0"
+                      className="size-11 shrink-0 sm:size-7"
                       aria-label={`Actions for ${itemName}`}
                     />
                   }
                 >
                   <MoreHorizontal className="size-4" />
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
+                <DropdownMenuContent
+                  align="end"
+                  side="bottom"
+                  sideOffset={6}
+                  collisionPadding={12}
+                  className="min-w-36 w-max max-w-[min(100vw-1.5rem,14rem)]"
+                >
                   <DropdownMenuItem onClick={() => onTogglePin(entry.id)}>
                     <Star
                       className={cn(
@@ -423,8 +477,13 @@ export function HistoryCard({
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            ) : null}
-          </div>
+            </div>
+          ) : null}
+        </div>
+
+        <div className="flex flex-wrap items-center gap-1.5 pl-0 sm:pl-0">
+          <SellingMethodBadge method={entry.resale.sellingMethod} />
+          {verdict ? <VerdictBadge verdict={verdict} /> : null}
         </div>
 
         <CompactMetrics
