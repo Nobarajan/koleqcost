@@ -46,8 +46,6 @@ import {
   type ExchangeRates,
   type HistoryEntry,
 } from "@/lib/koleqcost/types";
-import { cn } from "@/lib/utils";
-
 const RATES_API_URL = "/api/rates";
 const THEME_STORAGE_KEY = "koleqcost-theme";
 
@@ -232,17 +230,19 @@ export function KoleqCostView() {
     toast.success("History cleared.");
   };
 
-  useEffect(() => {
-    if (!detailEntry) return;
+  const detailEntryId = detailEntry?.id;
 
-    const updated = history.find((item) => item.id === detailEntry.id) ?? null;
+  useEffect(() => {
+    if (!detailEntryId) return;
+
+    const updated = history.find((item) => item.id === detailEntryId) ?? null;
     if (updated) {
       setDetailEntry(updated);
     } else {
       setDetailEntry(null);
       setDetailSheetOpen(false);
     }
-  }, [history, detailEntry?.id]);
+  }, [history, detailEntryId]);
 
   const handleOpenEditor = (id: string) => {
     const entry = history.find((item) => item.id === id) ?? null;
