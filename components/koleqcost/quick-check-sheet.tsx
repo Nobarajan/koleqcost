@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ChevronRight, Zap } from "lucide-react";
+import { Calculator } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -120,22 +121,19 @@ export function QuickCheckTrigger() {
 
   return (
     <>
-      <button
+      <Button
         type="button"
+        variant="ghost"
+        size="icon-sm"
+        className="relative size-11 shrink-0 text-muted-foreground hover:text-foreground sm:size-9"
         onClick={() => setOpen(true)}
-        className="group flex w-full items-center gap-3 rounded-xl border border-primary/25 bg-primary/8 px-4 py-3.5 text-left shadow-sm transition-all duration-200 hover:border-primary/40 hover:bg-primary/12 active:scale-[0.99]"
+        aria-label="Open quick percentage calculator"
       >
-        <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary">
-          <Zap className="size-5" />
-        </div>
-        <div className="min-w-0 flex-1">
-          <p className="text-sm font-semibold tracking-tight text-foreground">
-            80% Quick Check
-          </p>
-          <p className="mt-0.5 text-xs text-muted-foreground">Card show mode</p>
-        </div>
-        <ChevronRight className="size-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
-      </button>
+        <Calculator className="size-4 sm:size-3.5" />
+        <span className="absolute -top-1 -right-1 rounded-full bg-primary px-1 text-[8px] font-bold leading-none text-primary-foreground">
+          80%
+        </span>
+      </Button>
 
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent
@@ -144,7 +142,7 @@ export function QuickCheckTrigger() {
         >
           <SheetHeader className="shrink-0 border-b border-border/60 px-4 py-4 pr-12">
             <SheetTitle className="text-base font-semibold">
-              80% Quick Check
+              Quick Calculator
             </SheetTitle>
             <SheetDescription>
               Enter market price. Know your safe buy range instantly.

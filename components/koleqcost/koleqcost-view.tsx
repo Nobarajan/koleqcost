@@ -17,7 +17,6 @@ import { HistoryEditSheet } from "@/components/koleqcost/history-edit-sheet";
 import { HistorySection } from "@/components/koleqcost/history-section";
 import { KoleqCostHeader } from "@/components/koleqcost/koleqcost-header";
 import { KoleqCostFooter } from "@/components/koleqcost/koleqcost-footer";
-import { QuickCheckTrigger } from "@/components/koleqcost/quick-check-sheet";
 import { RiskWarningPanel } from "@/components/koleqcost/risk-warning-panel";
 import {
   computeBuyingCost,
@@ -272,8 +271,6 @@ export function KoleqCostView() {
       />
       <div className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col space-y-6 px-5 py-5 sm:space-y-8 sm:px-6 sm:py-8">
         <KoleqCostHeader />
-
-        <QuickCheckTrigger />
 
         <DealSnapshot
           buyingResults={buyingResults}
