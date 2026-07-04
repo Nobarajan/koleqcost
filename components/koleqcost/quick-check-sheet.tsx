@@ -2,9 +2,9 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Calculator } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
@@ -12,13 +12,10 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   computeQuickCheck,
   formatQuickCheckAmount,
   formatQuickCheckRange,
-  QUICK_CHECK_CURRENCIES,
-  type QuickCheckCurrency,
 } from "@/lib/koleqcost/quick-check";
 import {
   toneContainerClasses,
@@ -31,54 +28,50 @@ type RangeRow = {
   label: string;
   percentLabel: string;
   rangeText: string;
+  helper: string;
   tone: Tone;
 };
 
 function buildRangeRows(
   result: NonNullable<ReturnType<typeof computeQuickCheck>>,
-  currency: QuickCheckCurrency,
 ): RangeRow[] {
   return [
     {
-      label: "Steal",
+      label: "Great Deal",
       percentLabel: "≤70%",
-      rangeText: formatQuickCheckRange(null, result.stealMax, currency),
+      rangeText: formatQuickCheckRange(null, result.greatDealMax),
+      helper: "Buy if condition checks out",
       tone: "gold",
     },
     {
-      label: "Good Buy",
+      label: "Smart Buy",
       percentLabel: "71–80%",
-      rangeText: formatQuickCheckRange(
-        result.goodBuyMin,
-        result.goodBuyMax,
-        currency,
-      ),
+      rangeText: formatQuickCheckRange(result.smartBuyMin, result.smartBuyMax),
+      helper: "Good range",
       tone: "positive",
     },
     {
-      label: "Fair",
+      label: "Fair Price",
       percentLabel: "81–85%",
-      rangeText: formatQuickCheckRange(
-        result.fairMin,
-        result.fairMax,
-        currency,
-      ),
+      rangeText: formatQuickCheckRange(result.fairMin, result.fairMax),
+      helper: "Okay, but not a bargain",
       tone: "info",
     },
     {
-      label: "Risky",
+      label: "Slightly High",
       percentLabel: "86–90%",
       rangeText: formatQuickCheckRange(
-        result.riskyMin,
-        result.riskyMax,
-        currency,
+        result.slightlyHighMin,
+        result.slightlyHighMax,
       ),
+      helper: "Negotiate first",
       tone: "warning",
     },
     {
-      label: "Pass",
+      label: "Walk Away",
       percentLabel: ">90%",
-      rangeText: formatQuickCheckRange(result.passMin, null, currency),
+      rangeText: formatQuickCheckRange(result.walkAwayThreshold, null),
+      helper: "Unless rare or very clean",
       tone: "negative",
     },
   ];
@@ -87,7 +80,6 @@ function buildRangeRows(
 export function QuickCheckTrigger() {
   const [open, setOpen] = useState(false);
   const [priceInput, setPriceInput] = useState("");
-  const [currency, setCurrency] = useState<QuickCheckCurrency>("RM");
   const inputRef = useRef<HTMLInputElement>(null);
 
   const marketPrice = useMemo(() => {
@@ -95,20 +87,16 @@ export function QuickCheckTrigger() {
     return Number.isFinite(parsed) ? parsed : 0;
   }, [priceInput]);
 
-  const result = useMemo(
-    () => computeQuickCheck(marketPrice, currency),
-    [marketPrice, currency],
-  );
+  const result = useMemo(() => computeQuickCheck(marketPrice), [marketPrice]);
 
   const rangeRows = useMemo(
-    () => (result ? buildRangeRows(result, currency) : []),
-    [result, currency],
+    () => (result ? buildRangeRows(result) : []),
+    [result],
   );
 
   useEffect(() => {
     if (!open) {
       setPriceInput("");
-      setCurrency("RM");
       return;
     }
 
@@ -125,14 +113,11 @@ export function QuickCheckTrigger() {
         type="button"
         variant="ghost"
         size="icon-sm"
-        className="relative size-11 shrink-0 text-muted-foreground hover:text-foreground sm:size-9"
+        className="size-11 shrink-0 text-muted-foreground hover:text-foreground sm:size-9"
         onClick={() => setOpen(true)}
-        aria-label="Open quick percentage calculator"
+        aria-label="Open quick price checker"
       >
         <Calculator className="size-4 sm:size-3.5" />
-        <span className="absolute -top-1 -right-1 rounded-full bg-primary px-1 text-[8px] font-bold leading-none text-primary-foreground">
-          80%
-        </span>
       </Button>
 
       <Sheet open={open} onOpenChange={setOpen}>
@@ -145,42 +130,18 @@ export function QuickCheckTrigger() {
               Quick Calculator
             </SheetTitle>
             <SheetDescription>
-              Enter market price. Know your safe buy range instantly.
+              Enter last sold price. Know what you should pay.
             </SheetDescription>
           </SheetHeader>
 
           <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-4 py-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
             <div className="space-y-4">
               <div className="space-y-1.5">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-                  Currency
-                </p>
-                <Tabs
-                  value={currency}
-                  onValueChange={(next) =>
-                    setCurrency(next as QuickCheckCurrency)
-                  }
-                >
-                  <TabsList className="h-11 w-full min-w-0">
-                    {QUICK_CHECK_CURRENCIES.map((option) => (
-                      <TabsTrigger
-                        key={option}
-                        value={option}
-                        className="min-h-10 flex-1 text-xs"
-                      >
-                        {option}
-                      </TabsTrigger>
-                    ))}
-                  </TabsList>
-                </Tabs>
-              </div>
-
-              <div className="space-y-1.5">
                 <Label
                   htmlFor="quick-check-price"
                   className="text-xs text-muted-foreground"
                 >
-                  Market price / last sold price
+                  Market price / last sold
                 </Label>
                 <Input
                   ref={inputRef}
@@ -188,7 +149,7 @@ export function QuickCheckTrigger() {
                   type="number"
                   inputMode="decimal"
                   min="0"
-                  step={currency === "JPY" ? "1" : "0.01"}
+                  step="0.01"
                   placeholder="0.00"
                   value={priceInput}
                   onChange={(event) => setPriceInput(event.target.value)}
@@ -200,23 +161,29 @@ export function QuickCheckTrigger() {
                 className={cn(
                   "rounded-xl border px-4 py-4 text-center shadow-sm",
                   result
-                    ? toneContainerClasses.positive
+                    ? "border-primary/30 bg-gradient-to-b from-primary/12 to-primary/[0.03]"
                     : "border-border/60 bg-muted/20",
                 )}
               >
                 <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-                  80% Target
+                  Safe Buy Range
                 </p>
                 <p
                   className={cn(
                     "mt-2 font-mono text-3xl font-semibold tabular-nums tracking-tight sm:text-4xl",
-                    result ? toneTextClasses.positive : "text-muted-foreground",
+                    result ? "text-primary" : "text-muted-foreground",
                   )}
                 >
                   {result
-                    ? formatQuickCheckAmount(result.target, currency)
+                    ? formatQuickCheckRange(result.safeBuyMin, result.safeBuyMax)
                     : "—"}
                 </p>
+                {result ? (
+                  <p className="mt-1.5 text-xs text-muted-foreground">
+                    Best offer: {formatQuickCheckAmount(result.safeBuyMin)} or
+                    less
+                  </p>
+                ) : null}
               </div>
 
               {result ? (
@@ -230,16 +197,21 @@ export function QuickCheckTrigger() {
                       )}
                     >
                       <div className="min-w-0">
-                        <p
-                          className={cn(
-                            "text-sm font-medium",
-                            toneTextClasses[row.tone],
-                          )}
-                        >
-                          {row.label}
-                        </p>
-                        <p className="text-[11px] text-muted-foreground">
-                          {row.percentLabel}
+                        <div className="flex items-baseline gap-1.5">
+                          <p
+                            className={cn(
+                              "text-sm font-medium",
+                              toneTextClasses[row.tone],
+                            )}
+                          >
+                            {row.label}
+                          </p>
+                          <span className="text-[10px] text-muted-foreground">
+                            {row.percentLabel}
+                          </span>
+                        </div>
+                        <p className="text-[11px] italic text-muted-foreground">
+                          {row.helper}
                         </p>
                       </div>
                       <p
@@ -256,8 +228,8 @@ export function QuickCheckTrigger() {
               ) : null}
 
               <p className="text-center text-xs leading-relaxed text-muted-foreground">
-                At the 80% target or below, this is safer. Above 90%, margin is
-                too thin.
+                Guidance only — always check condition, photos, and seller
+                reputation before buying.
               </p>
             </div>
           </div>

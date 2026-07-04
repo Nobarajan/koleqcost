@@ -1,100 +1,89 @@
-export type QuickCheckCurrency = "RM" | "USD" | "JPY";
-
-export const QUICK_CHECK_CURRENCIES: QuickCheckCurrency[] = ["RM", "USD", "JPY"];
-
 export type QuickCheckResult = {
-  target: number;
-  stealMax: number;
-  goodBuyMin: number;
-  goodBuyMax: number;
+  /** 70% of market price */
+  safeBuyMin: number;
+  /** 80% of market price */
+  safeBuyMax: number;
+  /** Great Deal upper bound (≤70%) — same value as safeBuyMin */
+  greatDealMax: number;
+  /** Smart Buy lower bound (70% + 1 cent) */
+  smartBuyMin: number;
+  /** Smart Buy upper bound (80%) — same value as safeBuyMax */
+  smartBuyMax: number;
+  /** Fair Price lower bound (80% + 1 cent) */
   fairMin: number;
+  /** Fair Price upper bound (85%) */
   fairMax: number;
-  riskyMin: number;
-  riskyMax: number;
-  passMin: number;
+  /** Slightly High lower bound (85% + 1 cent) */
+  slightlyHighMin: number;
+  /** Slightly High upper bound (90%) */
+  slightlyHighMax: number;
+  /** Walk Away threshold — displayed as "> RM{walkAwayThreshold}" (90%) */
+  walkAwayThreshold: number;
 };
 
-function currencyStep(currency: QuickCheckCurrency): number {
-  return currency === "JPY" ? 1 : 0.01;
-}
+const CENT = 0.01;
 
-function roundForCurrency(value: number, currency: QuickCheckCurrency): number {
-  if (currency === "JPY") {
-    return Math.round(value);
-  }
+function round2(value: number): number {
   return Math.round(value * 100) / 100;
 }
 
-export function computeQuickCheck(
-  marketPrice: number,
-  currency: QuickCheckCurrency,
-): QuickCheckResult | null {
+export function computeQuickCheck(marketPrice: number): QuickCheckResult | null {
   if (!Number.isFinite(marketPrice) || marketPrice <= 0) {
     return null;
   }
 
-  const step = currencyStep(currency);
-
-  const stealMax = roundForCurrency(marketPrice * 0.7, currency);
-  const target = roundForCurrency(marketPrice * 0.8, currency);
-  const fairMax = roundForCurrency(marketPrice * 0.85, currency);
-  const riskyMax = roundForCurrency(marketPrice * 0.9, currency);
-
-  const goodBuyMin = roundForCurrency(stealMax + step, currency);
-  const fairMin = roundForCurrency(target + step, currency);
-  const riskyMin = roundForCurrency(fairMax + step, currency);
-  const passMin = roundForCurrency(riskyMax + step, currency);
+  const safeBuyMin = round2(marketPrice * 0.7);
+  const safeBuyMax = round2(marketPrice * 0.8);
+  const fairMax = round2(marketPrice * 0.85);
+  const slightlyHighMax = round2(marketPrice * 0.9);
 
   return {
-    target,
-    stealMax,
-    goodBuyMin,
-    goodBuyMax: target,
-    fairMin,
+    safeBuyMin,
+    safeBuyMax,
+    greatDealMax: safeBuyMin,
+    smartBuyMin: round2(safeBuyMin + CENT),
+    smartBuyMax: safeBuyMax,
+    fairMin: round2(safeBuyMax + CENT),
     fairMax,
-    riskyMin,
-    riskyMax,
-    passMin,
+    slightlyHighMin: round2(fairMax + CENT),
+    slightlyHighMax,
+    walkAwayThreshold: slightlyHighMax,
   };
 }
 
-const amountFormatter = new Intl.NumberFormat("en-US", {
+const wholeAmountFormatter = new Intl.NumberFormat("en-US", {
   minimumFractionDigits: 0,
+  maximumFractionDigits: 0,
+});
+
+const decimalAmountFormatter = new Intl.NumberFormat("en-US", {
+  minimumFractionDigits: 2,
   maximumFractionDigits: 2,
 });
 
-export function formatQuickCheckAmount(
-  value: number,
-  currency: QuickCheckCurrency,
-): string {
-  const formatted = amountFormatter.format(value);
-
-  switch (currency) {
-    case "RM":
-      return `RM${formatted}`;
-    case "USD":
-      return `$${formatted}`;
-    case "JPY":
-      return `¥${formatted}`;
-  }
+export function formatQuickCheckAmount(value: number): string {
+  const rounded = round2(value);
+  const formatted = Number.isInteger(rounded)
+    ? wholeAmountFormatter.format(rounded)
+    : decimalAmountFormatter.format(rounded);
+  return `RM${formatted}`;
 }
 
 export function formatQuickCheckRange(
   min: number | null,
   max: number | null,
-  currency: QuickCheckCurrency,
 ): string {
   if (min === null && max !== null) {
-    return `≤ ${formatQuickCheckAmount(max, currency)}`;
+    return `≤ ${formatQuickCheckAmount(max)}`;
   }
   if (min !== null && max === null) {
-    return `> ${formatQuickCheckAmount(min, currency)}`;
+    return `> ${formatQuickCheckAmount(min)}`;
   }
   if (min !== null && max !== null) {
     if (min === max) {
-      return formatQuickCheckAmount(min, currency);
+      return formatQuickCheckAmount(min);
     }
-    return `${formatQuickCheckAmount(min, currency)} – ${formatQuickCheckAmount(max, currency)}`;
+    return `${formatQuickCheckAmount(min)} – ${formatQuickCheckAmount(max)}`;
   }
   return "—";
 }
