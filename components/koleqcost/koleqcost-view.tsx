@@ -92,7 +92,7 @@ export function KoleqCostView() {
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", isDark);
-    const themeColor = isDark ? "#252628" : "#fbfbf9";
+    const themeColor = isDark ? "#282624" : "#fbfbf9";
     let meta = document.querySelector('meta[name="theme-color"]');
     if (!meta) {
       meta = document.createElement("meta");
@@ -306,12 +306,12 @@ export function KoleqCostView() {
   };
 
   return (
-    <div className="relative flex min-h-dvh flex-1 flex-col overflow-x-hidden bg-background text-foreground pt-[env(safe-area-inset-top)] pb-[calc(env(safe-area-inset-bottom)+6rem)] sm:pb-8">
+    <div className="relative flex min-h-dvh flex-1 flex-col overflow-x-hidden bg-background text-foreground pt-[env(safe-area-inset-top)] pb-24 sm:pb-8">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-48 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/8 via-transparent to-transparent"
       />
-      <div className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col gap-5 px-3 py-5 sm:gap-4 sm:px-6 sm:py-8">
+      <div className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col space-y-6 px-5 py-5 sm:space-y-8 sm:px-6 sm:py-8">
         <KoleqCostHeader
           isDark={isDark}
           onToggleTheme={handleToggleTheme}
@@ -330,29 +330,33 @@ export function KoleqCostView() {
           resaleMultiplierPercent={resaleInputs.resaleMultiplierPercent}
         />
 
-        <BuyingCostCard
-          inputs={buyingInputs}
-          results={buyingResults}
-          hasItemPrice={hasItemPrice}
-          onInputChange={handleBuyingInputChange}
-        />
+        <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-2">
+          <div className="space-y-4">
+            <BuyingCostCard
+              inputs={buyingInputs}
+              results={buyingResults}
+              hasItemPrice={hasItemPrice}
+              onInputChange={handleBuyingInputChange}
+            />
 
-        {buyingResults && (
-          <RiskWarningPanel
-            cifMyr={buyingResults.cifMyr}
-            taxPreset={buyingInputs.taxPreset}
+            {buyingResults && (
+              <RiskWarningPanel
+                cifMyr={buyingResults.cifMyr}
+                taxPreset={buyingInputs.taxPreset}
+              />
+            )}
+          </div>
+
+          <EbayResaleCard
+            open={ebayOpen}
+            onOpenChange={setEbayOpen}
+            inputs={resaleInputs}
+            results={resaleResults}
+            rates={rates}
+            hasSellingPrice={hasSellingPrice}
+            onInputChange={handleResaleInputChange}
           />
-        )}
-
-        <EbayResaleCard
-          open={ebayOpen}
-          onOpenChange={setEbayOpen}
-          inputs={resaleInputs}
-          results={resaleResults}
-          rates={rates}
-          hasSellingPrice={hasSellingPrice}
-          onInputChange={handleResaleInputChange}
-        />
+        </div>
 
         <HistorySection
           history={history}

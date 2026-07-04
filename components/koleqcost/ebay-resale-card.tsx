@@ -15,10 +15,9 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CurrencyStat } from "@/components/koleqcost/currency-stat";
+import { NumberField } from "@/components/koleqcost/number-field";
 import { ResultStat, SectionLabel } from "@/components/koleqcost/result-stat";
 import { formatPercent } from "@/lib/koleqcost/format";
 import {
@@ -76,40 +75,6 @@ function verdictBadge(verdict: ProfitVerdict) {
     default:
       return null;
   }
-}
-
-function NumberField({
-  id,
-  label,
-  value,
-  placeholder,
-  onChange,
-  step = "0.01",
-}: {
-  id: string;
-  label: string;
-  value: number | string;
-  placeholder?: string;
-  onChange: (value: string) => void;
-  step?: string;
-}) {
-  return (
-    <div className="space-y-1.5">
-      <Label htmlFor={id} className="text-xs">
-        {label}
-      </Label>
-      <Input
-        id={id}
-        type="number"
-        min="0"
-        step={step}
-        placeholder={placeholder}
-        value={value === 0 ? "" : value}
-        onChange={(e) => onChange(e.target.value)}
-        className="h-11 sm:h-8"
-      />
-    </div>
-  );
 }
 
 function SellingMethodToggle({
@@ -172,7 +137,7 @@ function CurrencySelector({
         value={value}
         onValueChange={(next) => onChange(next as DisplayCurrency)}
       >
-        <TabsList className="h-11 w-full min-w-0 sm:h-8 sm:w-auto">
+        <TabsList className="h-11 w-full min-w-0 sm:h-9 sm:w-auto">
           {DISPLAY_CURRENCY_OPTIONS.map((option) => (
             <TabsTrigger key={option} value={option} className="min-h-10 flex-1 px-2 text-xs sm:min-h-0 sm:flex-none sm:px-2">
               {option === "ALL" ? "All" : option}
@@ -267,7 +232,7 @@ export function EbayResaleCard({
     <Collapsible open={open} onOpenChange={onOpenChange}>
       <Card
         size="sm"
-        className="transition-all duration-200 sm:hover:-translate-y-0.5 sm:hover:shadow-md"
+        className="shadow-sm ring-1 ring-border/60 transition-all duration-200 sm:hover:-translate-y-0.5 sm:hover:shadow-md"
       >
         <CollapsibleTrigger className="w-full text-left">
           <CardHeader className="min-h-11 cursor-pointer transition-colors hover:bg-muted/30 sm:min-h-0">
@@ -308,8 +273,8 @@ export function EbayResaleCard({
               className={cn(
                 "grid gap-3",
                 isEbay
-                  ? "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-                  : "mx-auto w-full max-w-md grid-cols-2 sm:max-w-lg",
+                  ? "sm:grid-cols-2"
+                  : "grid-cols-1 sm:grid-cols-2",
               )}
             >
               {isEbay ? (
@@ -470,7 +435,7 @@ export function EbayResaleCard({
               </div>
             ) : results ? (
               <div className="space-y-4">
-                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                   <CurrencyStat
                     label={isEbay ? "Sold price" : "Local selling price"}
                     amounts={sellingPriceAmounts}

@@ -126,7 +126,7 @@ export function HistorySection({
   return (
     <Card
       size="sm"
-      className="transition-all duration-200 sm:hover:-translate-y-0.5 sm:hover:shadow-md"
+      className="shadow-sm ring-1 ring-border/60 transition-all duration-200 sm:hover:-translate-y-0.5 sm:hover:shadow-md"
     >
       <CardHeader>
         <div className="flex flex-wrap items-start justify-between gap-3">

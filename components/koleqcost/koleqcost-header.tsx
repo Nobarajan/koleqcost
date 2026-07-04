@@ -28,18 +28,30 @@ export function KoleqCostHeader({
   fetchError = null,
 }: KoleqCostHeaderProps) {
   return (
-    <header className="space-y-3 border-b border-border/60 pb-5">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+    <header className="space-y-2 border-b border-border/60 pb-4 sm:pb-5">
+      <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex min-w-0 flex-wrap items-center gap-2.5">
-          <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary sm:size-8">
+          <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
             <Gem className="size-4" />
           </div>
-          <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
-            KoleqCost
-          </h1>
-          <Badge className={cn("text-[10px] uppercase tracking-wide", toneBadgeClasses.warning)}>
-            Estimate only
-          </Badge>
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
+                KoleqCost
+              </h1>
+              <Badge
+                className={cn(
+                  "text-[10px] uppercase tracking-wide",
+                  toneBadgeClasses.warning,
+                )}
+              >
+                Estimate only
+              </Badge>
+            </div>
+            <p className="mt-0.5 text-xs text-muted-foreground sm:text-sm">
+              Landed Cost & Profit Calculator for Collectors
+            </p>
+          </div>
         </div>
 
         <div className="flex min-w-0 items-center justify-between gap-2 sm:flex-col sm:items-end sm:justify-start">
@@ -65,7 +77,10 @@ export function KoleqCostHeader({
               aria-label="Refresh exchange rate"
             >
               <RefreshCw
-                className={cn("size-4 sm:size-3", isRefreshing && "animate-spin")}
+                className={cn(
+                  "size-4 sm:size-3",
+                  isRefreshing && "animate-spin",
+                )}
               />
             </Button>
             <Button
@@ -77,7 +92,11 @@ export function KoleqCostHeader({
                 isDark ? "Switch to light mode" : "Switch to dark mode"
               }
             >
-              {isDark ? <Sun className="size-4 sm:size-3.5" /> : <Moon className="size-4 sm:size-3.5" />}
+              {isDark ? (
+                <Sun className="size-4 sm:size-3.5" />
+              ) : (
+                <Moon className="size-4 sm:size-3.5" />
+              )}
             </Button>
           </div>
           {fetchError ? (
@@ -86,16 +105,6 @@ export function KoleqCostHeader({
             </p>
           ) : null}
         </div>
-      </div>
-
-      <div className="space-y-1.5">
-        <p className="text-sm font-medium tracking-tight text-foreground sm:text-base">
-          Know your real cost before you buy.
-        </p>
-        <p className="max-w-2xl text-xs leading-relaxed text-muted-foreground sm:text-sm">
-          Calculate landed cost, resale price, fees, profit, ROI, and
-          break-even value for collectibles.
-        </p>
       </div>
     </header>
   );

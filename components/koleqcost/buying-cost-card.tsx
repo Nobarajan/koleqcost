@@ -24,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { NumberField } from "@/components/koleqcost/number-field";
 import { ResultStat, SectionLabel } from "@/components/koleqcost/result-stat";
 import { formatMYR, formatUSD } from "@/lib/koleqcost/format";
 import type {
@@ -45,40 +46,6 @@ type BuyingCostCardProps = {
     value: BuyingInputs[K],
   ) => void;
 };
-
-function NumberField({
-  id,
-  label,
-  value,
-  placeholder,
-  onChange,
-  step = "0.01",
-}: {
-  id: string;
-  label: string;
-  value: number | string;
-  placeholder?: string;
-  onChange: (value: string) => void;
-  step?: string;
-}) {
-  return (
-    <div className="space-y-1.5">
-      <Label htmlFor={id} className="text-xs sm:text-xs">
-        {label}
-      </Label>
-      <Input
-        id={id}
-        type="number"
-        min="0"
-        step={step}
-        placeholder={placeholder}
-        value={value === 0 ? "" : value}
-        onChange={(e) => onChange(e.target.value)}
-        className="h-11 sm:h-8"
-      />
-    </div>
-  );
-}
 
 function formatDutyValue(value: number, isManual: boolean): string {
   return isManual ? "—" : formatMYR(value);
@@ -170,7 +137,7 @@ export function BuyingCostCard({
   return (
     <Card
       size="sm"
-      className="transition-all duration-200 sm:hover:-translate-y-0.5 sm:hover:shadow-md"
+      className="shadow-sm ring-1 ring-border/60 transition-all duration-200 sm:hover:-translate-y-0.5 sm:hover:shadow-md"
     >
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
@@ -183,7 +150,7 @@ export function BuyingCostCard({
       </CardHeader>
       <CardContent className="space-y-4">
         <SectionLabel>Inputs</SectionLabel>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-3 sm:grid-cols-2">
           <NumberField
             id="item-price"
             label="Item price (USD)"
@@ -221,7 +188,7 @@ export function BuyingCostCard({
             }
           />
           <div className="space-y-1.5 sm:col-span-2 lg:col-span-3">
-            <Label htmlFor="note" className="text-xs">
+            <Label htmlFor="note" className="text-xs text-muted-foreground">
               Item name
             </Label>
             <Input
@@ -229,7 +196,7 @@ export function BuyingCostCard({
               placeholder="e.g. PSA 10 Charizard"
               value={inputs.note}
               onChange={(e) => onInputChange("note", e.target.value)}
-              className="h-11 sm:h-8"
+              className="h-11 sm:h-9"
             />
           </div>
         </div>
@@ -261,7 +228,7 @@ export function BuyingCostCard({
             <CollapsibleContent>
               <div className="space-y-3 border-t border-border/60 px-3 py-3">
                 <div className="space-y-1.5">
-                  <Label htmlFor="tax-preset" className="text-xs">
+                  <Label htmlFor="tax-preset" className="text-xs text-muted-foreground">
                     Tax preset
                   </Label>
                   <Select
@@ -270,7 +237,7 @@ export function BuyingCostCard({
                       handleTaxPresetChange(value as TaxPreset)
                     }
                   >
-                    <SelectTrigger id="tax-preset" className="w-full bg-background">
+                    <SelectTrigger id="tax-preset" className="h-11 w-full bg-background sm:h-9">
                       <SelectValue placeholder="Select tax preset">
                         {TAX_PRESET_SHORT_LABELS[inputs.taxPreset]}
                       </SelectValue>
@@ -339,7 +306,7 @@ export function BuyingCostCard({
                       }
                     />
                     <div className="space-y-1.5">
-                      <Label htmlFor="tax-basis" className="text-xs">
+                      <Label htmlFor="tax-basis" className="text-xs text-muted-foreground">
                         Tax basis
                       </Label>
                       <Select
@@ -348,7 +315,7 @@ export function BuyingCostCard({
                           onInputChange("taxBasis", value as TaxBasis)
                         }
                       >
-                        <SelectTrigger id="tax-basis" className="w-full bg-background">
+                        <SelectTrigger id="tax-basis" className="h-11 w-full bg-background sm:h-9">
                           <SelectValue placeholder="Select tax basis" />
                         </SelectTrigger>
                         <SelectContent>
@@ -442,7 +409,7 @@ export function BuyingCostCard({
             Enter item price to calculate.
           </div>
         ) : results ? (
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             <div className="min-w-0 overflow-hidden rounded-lg border border-border/60 bg-muted/30 px-3 py-2.5 sm:col-span-2">
               <p className="truncate text-xs text-muted-foreground">
                 CIF (MYR)
