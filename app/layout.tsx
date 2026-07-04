@@ -21,10 +21,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fbfbf9" },
-    { media: "(prefers-color-scheme: dark)", color: "#282624" },
-  ],
+  themeColor: "#282624",
 };
 
 export const metadata: Metadata = {
@@ -56,15 +53,8 @@ export default function RootLayout({
       lang="en"
       data-scroll-behavior="smooth"
       suppressHydrationWarning
-      className={`koleqcost-theme ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`dark koleqcost-theme ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('koleqcost-theme');var d=t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();`,
-          }}
-        />
-      </head>
       <body className="m-0 flex min-h-dvh flex-col bg-background text-foreground antialiased">
         <TooltipProvider>
           <main id="root" className="flex min-h-dvh flex-1 flex-col bg-background">

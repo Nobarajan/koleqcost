@@ -69,10 +69,6 @@ html {
 }
 
 html.koleqcost-theme {
-  color-scheme: light;
-}
-
-html.koleqcost-theme.dark {
   color-scheme: dark;
 }
 
@@ -105,110 +101,7 @@ body {
   }
 }
 
-:root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.9rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-}
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-}
-
 .koleqcost-theme {
-  --background: oklch(0.985 0.004 75);
-  --foreground: oklch(0.22 0.018 75);
-  --card: oklch(1 0.002 75);
-  --card-foreground: oklch(0.22 0.018 75);
-  --popover: oklch(1 0.002 75);
-  --popover-foreground: oklch(0.22 0.018 75);
-  --primary: oklch(0.52 0.1 72);
-  --primary-foreground: oklch(0.99 0.01 75);
-  --secondary: oklch(0.94 0.01 75);
-  --secondary-foreground: oklch(0.32 0.06 72);
-  --muted: oklch(0.96 0.005 75);
-  --muted-foreground: oklch(0.5 0.012 75);
-  --accent: oklch(0.93 0.03 72);
-  --accent-foreground: oklch(0.32 0.07 72);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.9 0.008 75);
-  --input: oklch(0.91 0.008 75);
-  --ring: oklch(0.58 0.1 72 / 65%);
-  --positive: oklch(0.45 0.16 158);
-  --positive-foreground: oklch(0.99 0.01 155);
-  --warning: oklch(0.63 0.17 55);
-  --warning-foreground: oklch(0.28 0.07 55);
-  --info: oklch(0.5 0.16 250);
-  --info-foreground: oklch(0.99 0.01 250);
-  --purple-accent: oklch(0.5 0.18 300);
-  --purple-accent-foreground: oklch(0.99 0.01 300);
-  --orange-accent: oklch(0.61 0.18 55);
-  --orange-accent-foreground: oklch(0.28 0.07 55);
-  --gold-accent: oklch(0.71 0.16 85);
-  --gold-accent-foreground: oklch(0.28 0.07 85);
-  --primary-tint: oklch(0.52 0.1 72 / 7%);
-}
-
-.koleqcost-theme.dark {
   --background: oklch(0.16 0.008 75);
   --foreground: oklch(0.96 0.008 75);
   --card: oklch(0.21 0.01 75);
@@ -240,6 +133,20 @@ body {
   --gold-accent: oklch(0.8 0.15 85);
   --gold-accent-foreground: oklch(0.17 0.035 85);
   --primary-tint: oklch(0.78 0.1 72 / 9%);
+  --radius: 0.9rem;
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: oklch(0.21 0.01 75);
+  --sidebar-foreground: oklch(0.96 0.008 75);
+  --sidebar-primary: oklch(0.78 0.1 72);
+  --sidebar-primary-foreground: oklch(0.16 0.02 72);
+  --sidebar-accent: oklch(0.27 0.012 75);
+  --sidebar-accent-foreground: oklch(0.92 0.04 72);
+  --sidebar-border: oklch(1 0 0 / 11%);
+  --sidebar-ring: oklch(0.78 0.1 72 / 65%);
 }
 
 .koleqcost-theme input:hover:not(:disabled),

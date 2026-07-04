@@ -17,6 +17,7 @@ import { HistoryEditSheet } from "@/components/koleqcost/history-edit-sheet";
 import { HistorySection } from "@/components/koleqcost/history-section";
 import { KoleqCostHeader } from "@/components/koleqcost/koleqcost-header";
 import { KoleqCostFooter } from "@/components/koleqcost/koleqcost-footer";
+import { QuickCheckTrigger } from "@/components/koleqcost/quick-check-sheet";
 import { RiskWarningPanel } from "@/components/koleqcost/risk-warning-panel";
 import {
   computeBuyingCost,
@@ -47,7 +48,6 @@ import {
   type HistoryEntry,
 } from "@/lib/koleqcost/types";
 const RATES_API_URL = "/api/rates";
-const THEME_STORAGE_KEY = "koleqcost-theme";
 
 type RatesApiResponse = {
   usdMyr: number;
@@ -55,19 +55,9 @@ type RatesApiResponse = {
   source: "live";
 };
 
-function getInitialDarkMode(): boolean {
-  if (typeof window === "undefined") return false;
-  const stored = localStorage.getItem(THEME_STORAGE_KEY);
-  if (stored === "dark") return true;
-  if (stored === "light") return false;
-  return window.matchMedia("(prefers-color-scheme: dark)").matches;
-}
-
 export function KoleqCostView() {
   const [rates, setRates] = useState<ExchangeRates>(FALLBACK_RATES);
   const [manualOverride, setManualOverride] = useState(false);
-  const [isLoadingRates, setIsLoadingRates] = useState(true);
-  const [fetchError, setFetchError] = useState<string | null>(null);
   const [buyingInputs, setBuyingInputs] =
     useState<BuyingInputs>(DEFAULT_BUYING_INPUTS);
   const [resaleInputs, setResaleInputs] =
@@ -75,7 +65,6 @@ export function KoleqCostView() {
   const [ebayOpen, setEbayOpen] = useState(true);
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [hydrated, setHydrated] = useState(false);
-  const [isDark, setIsDark] = useState(false);
   const [editingEntry, setEditingEntry] = useState<HistoryEntry | null>(null);
   const [editSheetOpen, setEditSheetOpen] = useState(false);
   const [detailEntry, setDetailEntry] = useState<HistoryEntry | null>(null);
@@ -86,26 +75,10 @@ export function KoleqCostView() {
     setRates(stored);
     setManualOverride(stored.source === "manual");
     setHistory(readHistory());
-    setIsDark(getInitialDarkMode());
     setHydrated(true);
   }, []);
 
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", isDark);
-    const themeColor = isDark ? "#282624" : "#fbfbf9";
-    let meta = document.querySelector('meta[name="theme-color"]');
-    if (!meta) {
-      meta = document.createElement("meta");
-      meta.setAttribute("name", "theme-color");
-      document.head.appendChild(meta);
-    }
-    meta.setAttribute("content", themeColor);
-  }, [isDark]);
-
   const fetchRates = useCallback(async () => {
-    setIsLoadingRates(true);
-    setFetchError(null);
-
     try {
       const response = await fetch(RATES_API_URL);
       if (!response.ok) {
@@ -129,10 +102,6 @@ export function KoleqCostView() {
       }
     } catch {
       const cached = getInitialRates();
-      const fallbackMessage =
-        "Could not fetch live rates. Using fallback or cached values — you can override manually.";
-
-      setFetchError(fallbackMessage);
 
       if (!manualOverride) {
         const nextRates =
@@ -142,8 +111,6 @@ export function KoleqCostView() {
         setRates(nextRates);
         writeStoredRates(nextRates);
       }
-    } finally {
-      setIsLoadingRates(false);
     }
   }, [manualOverride]);
 
@@ -171,14 +138,6 @@ export function KoleqCostView() {
       rates.usdMyr,
     );
   }, [buyingResults, hasSellingPrice, resaleInputs, rates.usdMyr]);
-
-  const handleToggleTheme = () => {
-    setIsDark((current) => {
-      const next = !current;
-      localStorage.setItem(THEME_STORAGE_KEY, next ? "dark" : "light");
-      return next;
-    });
-  };
 
   const handleBuyingInputChange = <K extends keyof BuyingInputs>(
     field: K,
@@ -312,15 +271,9 @@ export function KoleqCostView() {
         className="pointer-events-none absolute inset-x-0 top-0 h-48 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/8 via-transparent to-transparent"
       />
       <div className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col space-y-6 px-5 py-5 sm:space-y-8 sm:px-6 sm:py-8">
-        <KoleqCostHeader
-          isDark={isDark}
-          onToggleTheme={handleToggleTheme}
-          onRefresh={() => void fetchRates()}
-          usdMyr={rates.usdMyr}
-          isLoadingRate={isLoadingRates && !manualOverride}
-          isRefreshing={isLoadingRates}
-          fetchError={fetchError}
-        />
+        <KoleqCostHeader />
+
+        <QuickCheckTrigger />
 
         <DealSnapshot
           buyingResults={buyingResults}
@@ -392,7 +345,7 @@ export function KoleqCostView() {
       </div>
 
       <Sonner
-        theme={isDark ? "dark" : "light"}
+        theme="dark"
         position="bottom-right"
         richColors
         closeButton
