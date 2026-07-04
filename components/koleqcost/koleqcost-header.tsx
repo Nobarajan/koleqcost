@@ -1,11 +1,9 @@
 "use client";
 
 import { Gem, Moon, RefreshCw, Sun } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatRate } from "@/lib/koleqcost/format";
-import { toneBadgeClasses } from "@/lib/koleqcost/tone";
 import { cn } from "@/lib/utils";
 
 type KoleqCostHeaderProps = {
@@ -35,19 +33,9 @@ export function KoleqCostHeader({
             <Gem className="size-4" />
           </div>
           <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2">
-              <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
-                KoleqCost
-              </h1>
-              <Badge
-                className={cn(
-                  "text-[10px] uppercase tracking-wide",
-                  toneBadgeClasses.warning,
-                )}
-              >
-                Estimate only
-              </Badge>
-            </div>
+            <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
+              KoleqCost
+            </h1>
             <p className="mt-0.5 text-xs text-muted-foreground sm:text-sm">
               Landed Cost & Profit Calculator for Collectors
             </p>
